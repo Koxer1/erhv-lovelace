@@ -6,12 +6,7 @@ import {
 import {customElement, property, state} from "lit/decorators.js";
 
 import {fireEvent, HomeAssistant, LovelaceCard} from "custom-card-helpers";
-import {findEntities} from "./common/find-entities";
 import {ERHVCardConfig} from "./types";
-
-const validEntityId = /^(\w+)\.(\w+)$/;
-const isValidEntityId = (entityId: string) =>
-    validEntityId.test(entityId);
 
 @customElement("erhv-card")
 export class ERHVCard extends LitElement implements LovelaceCard {
@@ -22,32 +17,12 @@ export class ERHVCard extends LitElement implements LovelaceCard {
         return document.createElement("erhv-card-editor");
     }
 
-    static getStubConfig(
-        hass: HomeAssistant,
-        entities: string[],
-        entitiesFill: string[]
-    ) {
-        const includeDomains = ["climate"];
-        const maxEntities = 1;
-        const foundEntities = findEntities(
-            hass,
-            maxEntities,
-            entities,
-            entitiesFill,
-            includeDomains
-        );
-        // Return a minimal configuration that will result in a working card configuration
-        return {climate_entity: foundEntities[0] || ""};
+    static getStubConfig() {
+        // Return a minimal configuration - no required entities
+        return {};
     }
 
     public setConfig(config: ERHVCardConfig): void {
-        if (!config.entity) {
-            throw new Error("Entity must be specified");
-        }
-        if (config.entity && !isValidEntityId(config.entity)) {
-            throw new Error("Invalid entity");
-        }
-
         this._config = config;
 
         if (this._config.footer) {
@@ -58,18 +33,14 @@ export class ERHVCard extends LitElement implements LovelaceCard {
     }
 
     private _handleMoreInfo(): void {
-        fireEvent(this, "hass-more-info", {entityId: this._config!.entity});
+        if (this._config?.climate_entity) {
+            fireEvent(this, "hass-more-info", {entityId: this._config.climate_entity});
+        }
     }
 
     render() {
         if (!this.hass || !this._config) {
             return html`Custom card not found!`;
-        }
-
-        const stateObj = this.hass.states[this._config.climate_entity];
-        if (!stateObj) {
-            return html`
-                <ha-card>Unknown entity: ${this._config.climate_entity}</ha-card> `;
         }
 
         const name = this._config.name || "NoName";
@@ -173,12 +144,14 @@ export class ERHVCard extends LitElement implements LovelaceCard {
                     <!-- start center column -->
                     <div id="center">
                         <div id="target_temperature">
+                            ${this._config.climate_entity && this.hass.states[this._config.climate_entity] ? html`
                             <svg viewBox="0 0 80 40">
                                 <text x="50%" dx="1" y="25%" text-anchor="middle" style="font-size:13px" @click=${this._handleMoreInfo}>
                                     ${this.hass.states[this._config.climate_entity].attributes.temperature}
                                     <tspan dx="-3" dy="-6.5" style="font-size:4px">°C</tspan>
                                 </text>
                             </svg>
+                            ` : html``}
                         </div>
                     </div>
                     <!-- end center column -->
