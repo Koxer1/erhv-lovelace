@@ -13,7 +13,7 @@ export const ERHVSchema = [
             {
                 name: "intake_fan_speed_rpm",
                 selector: {entity: {domain: ["sensor"]}},
-                label: "Intake fan speed rpm",
+                label: "Intake air flow (m³/h)",
             },
             {
                 name: "intake_fan_speed_percentage",
@@ -33,7 +33,7 @@ export const ERHVSchema = [
             {
                 name: "exhaust_fan_speed_rpm",
                 selector: {entity: {domain: ["sensor"]}},
-                label: "Exhaust fan speed rpm",
+                label: "Exhaust air flow (m³/h)",
             },
             {
                 name: "exhaust_fan_speed_percentage",

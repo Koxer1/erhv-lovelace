@@ -116,7 +116,7 @@ export class ERHVCard extends LitElement implements LovelaceCard {
                                     ${this._getState(this._config.intake_temperature)}°C
                                 </text>
                                 <text font-size="24px" x="54" y="135">
-                                    ${this._getState(this._config.intake_fan_speed_rpm)} rpm
+                                    ${this._getState(this._config.intake_fan_speed_rpm)} m³/h
                                 </text>
                                 <g transform="translate(10, 110) scale(0.2, 0.2)">
                                     <svg preserveAspectRatio="xMidYMid meet" focusable="false" role="img"
@@ -137,7 +137,7 @@ export class ERHVCard extends LitElement implements LovelaceCard {
                                     ${this._getState(this._config.exhaust_temperature)}°C
                                 </text>
                                 <text font-size="24px" x="54" y="158">
-                                    ${this._getNumericState(this._config.exhaust_fan_speed_rpm)} rpm
+                                    ${this._getNumericState(this._config.exhaust_fan_speed_rpm)} m³/h
                                 </text>
                                 <g transform="translate(10, 133) scale(0.2, 0.2)">
                                     <svg preserveAspectRatio="xMidYMid meet" focusable="false" role="img"
