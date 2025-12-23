@@ -38,6 +38,18 @@ export class ERHVCard extends LitElement implements LovelaceCard {
         }
     }
 
+    private _getState(entityId?: string): string {
+        if (!entityId || !this.hass?.states[entityId]) {
+            return "--";
+        }
+        return this.hass.states[entityId].state;
+    }
+
+    private _getNumericState(entityId?: string): number {
+        const state = this._getState(entityId);
+        return state === "--" ? 0 : Math.trunc(Number(state));
+    }
+
     render() {
         if (!this.hass || !this._config) {
             return html`Custom card not found!`;
@@ -101,10 +113,10 @@ export class ERHVCard extends LitElement implements LovelaceCard {
                         <div id="intake">
                             <svg viewBox="0 0 212.5 180">
                                 <text font-size="24px" x="10" y="35">
-                                    ${this.hass.states[this._config.intake_temperature].state}°C
+                                    ${this._getState(this._config.intake_temperature)}°C
                                 </text>
                                 <text font-size="24px" x="54" y="135">
-                                    ${this.hass.states[this._config.intake_fan_speed_rpm].state} rpm
+                                    ${this._getState(this._config.intake_fan_speed_rpm)} rpm
                                 </text>
                                 <g transform="translate(10, 110) scale(0.2, 0.2)">
                                     <svg preserveAspectRatio="xMidYMid meet" focusable="false" role="img"
@@ -122,10 +134,10 @@ export class ERHVCard extends LitElement implements LovelaceCard {
                         <div id="exhaust">
                             <svg viewBox="0 0 212.5 180">
                                 <text font-size="24px" x="10" y="58">
-                                    ${this.hass.states[this._config.exhaust_temperature].state}°C
+                                    ${this._getState(this._config.exhaust_temperature)}°C
                                 </text>
                                 <text font-size="24px" x="54" y="158">
-                                    ${Math.trunc(Number(this.hass.states[this._config.exhaust_fan_speed_rpm].state))} rpm
+                                    ${this._getNumericState(this._config.exhaust_fan_speed_rpm)} rpm
                                 </text>
                                 <g transform="translate(10, 133) scale(0.2, 0.2)">
                                     <svg preserveAspectRatio="xMidYMid meet" focusable="false" role="img"
@@ -162,10 +174,10 @@ export class ERHVCard extends LitElement implements LovelaceCard {
                         <div id="return">
                             <svg viewBox="0 0 212.5 180">
                                 <text font-size="24px" x="204.5" y="35" text-anchor="end">
-                                    ${this.hass.states[this._config.return_temperature].state}°C
+                                    ${this._getState(this._config.return_temperature)}°C
                                 </text>
                                 <text font-size="24px" x="160" y="135" text-anchor="end">
-                                    ${Math.trunc(Number(this.hass.states[this._config.exhaust_fan_speed_percentage].state))}%
+                                    ${this._getNumericState(this._config.exhaust_fan_speed_percentage)}%
                                 </text>
                                 <g transform="translate(160, 110) scale(0.2, 0.2)">
                                     <svg preserveAspectRatio="xMidYMid meet" focusable="false" role="img"
@@ -183,10 +195,10 @@ export class ERHVCard extends LitElement implements LovelaceCard {
                         <div id="supply">
                             <svg viewBox="0 0 212.5 180">
                                 <text font-size="24px" x="204.5" y="58" text-anchor="end">
-                                    ${this.hass.states[this._config.supply_temperature].state}°C
+                                    ${this._getState(this._config.supply_temperature)}°C
                                 </text>
                                 <text font-size="24px" x="160" y="158" text-anchor="end">
-                                    ${Math.trunc(Number(this.hass.states[this._config.intake_fan_speed_percentage].state))}%
+                                    ${this._getNumericState(this._config.intake_fan_speed_percentage)}%
                                 </text>
                                 <g transform="translate(160, 133) scale(0.2, 0.2)">
                                     <svg preserveAspectRatio="xMidYMid meet" focusable="false" role="img"
